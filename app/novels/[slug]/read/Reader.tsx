@@ -158,11 +158,11 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
 
   return (
     <div className="relative min-h-screen flex flex-col">
-      {/* Top bar — hides during ending takeover */}
+      {/* Top bar — hides during ending takeover. pr-16 leaves room for the floating ThemeToggle at top-right. */}
       {!showEnding && (
-        <header className="flex items-center justify-between px-6 py-5 border-b border-line bg-paper/95 backdrop-blur-sm sticky top-0 z-10">
+        <header className="flex items-center justify-between pl-6 pr-16 sm:pr-20 py-5 border-b border-line bg-paper/95 backdrop-blur-sm sticky top-0 z-10">
           <BrandWordmark size="mini" href="/" />
-          <span className="text-muted text-xs tracking-widest">
+          <span className="text-muted text-xs tracking-widest truncate ml-4 hidden sm:inline">
             Vol. I &middot; {novelTitle}
           </span>
         </header>
@@ -176,7 +176,7 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="flex-1 flex"
+            className="flex-1 flex flex-col"
           >
             <EndingScreen
               novelTitle={novelTitle}

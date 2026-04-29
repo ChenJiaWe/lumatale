@@ -9,33 +9,10 @@ type EndingScreenProps = {
 export default function EndingScreen({ novelTitle, novelSlug, onRestart }: EndingScreenProps) {
   return (
     <div
-      className="w-full min-h-screen flex flex-col items-center justify-center bg-paper-dark px-6"
-      style={{
-        animation: 'endingFadeIn 800ms ease-out both',
-      }}
+      className="w-full flex-1 flex flex-col items-center justify-center bg-paper-dark px-6"
       role="main"
       aria-label="故事已读完"
     >
-      <style>{`
-        @keyframes endingFadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(32px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @media (prefers-reduced-motion: reduce) {
-          @keyframes endingFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-          }
-        }
-      `}</style>
-
       <div className="flex flex-col items-center gap-8 max-w-sm text-center">
         {/* Ellipsis ornament */}
         <span
