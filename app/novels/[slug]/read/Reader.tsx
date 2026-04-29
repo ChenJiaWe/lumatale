@@ -88,7 +88,12 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
   }, [currentIndex]);
 
   useEffect(() => {
-    if (showEnding) stopSpeaking();
+    if (showEnding) {
+      stopSpeaking();
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showEnding]);
 
@@ -157,7 +162,11 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
   const endingInitial = shouldReduce ? { opacity: 0 } : { opacity: 0, y: 32 };
 
   return (
-    <div className="relative min-h-screen flex flex-col">
+    <div
+      className={`relative min-h-screen flex flex-col${
+        showEnding ? ' h-screen overflow-hidden' : ''
+      }`}
+    >
       {/* Top bar — hides during ending takeover. pr-16 leaves room for the floating ThemeToggle at top-right. */}
       {!showEnding && (
         <header className="flex items-center justify-between pl-6 pr-16 sm:pr-20 py-5 border-b border-line bg-paper/95 backdrop-blur-sm sticky top-0 z-10">
