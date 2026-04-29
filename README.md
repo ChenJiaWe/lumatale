@@ -110,6 +110,55 @@ to the lead via inbox messages. The lead handled all `git` operations
 to avoid stage conflicts. Each commit message captures one logical
 change.
 
+## Architecture
+
+A layered backend so the database is never touched directly from a
+page or component:
+
+```
+                              ┌────────────────────────┐
+   RSC Pages (app/*/page.tsx) │     External clients   │
+                       │      └───────────┬────────────┘
+                       │                  │
+                       │                  ▼
+                       │        ┌─────────────────┐
+                       │        │   API Routes    │
+                       │        │  (app/api/...)  │
+                       │        └────────┬────────┘
+                       │                 │
+                       └────────┬────────┘
+                                │
+                                ▼
+                       ┌─────────────────────┐
+                       │   Service layer     │
+                       │ (lib/services/*.ts) │  React `cache()`,
+                       └──────────┬──────────┘  request-scoped dedup
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │   Repository        │
+                       │ (lib/repositories)  │  Pure data access
+                       └──────────┬──────────┘
+                                  │
+                                  ▼
+                       ┌─────────────────────┐
+                       │   Supabase client   │
+                       │ (lib/supabase)      │  Driver
+                       └─────────────────────┘
+```
+
+- Pages render via the **service layer** directly — no internal
+  HTTP self-roundtrip during build / SSR (faster prerender, fewer
+  failure modes).
+- The **HTTP API** (`/api/novels`, `/api/novels/[slug]`,
+  `/api/novels/[slug]/scenes`) shares the same service so any
+  external consumer (mobile app, scraper, third-party reader) sees
+  the same contract pages do.
+- Only the **repository** ever talks to Supabase. Swap the driver
+  (Postgres direct, Drizzle, Prisma) by replacing one file.
+- The service layer wraps repo calls in React `cache()` so that
+  any single render pass dedups multiple lookups for the same key.
+
 ## Architecture decisions
 
 A few choices worth surfacing — full rationale in `.omc/plans/`:

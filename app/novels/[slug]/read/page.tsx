@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getNovelBySlug, getScenesForNovel } from '@/lib/db/queries';
+import { getReadingForNovel, getNovelBySlug } from '@/lib/services/novel-service';
 import Reader from './Reader';
 
 export const revalidate = 3600;
@@ -30,22 +30,19 @@ export default async function ReadPage({
 }) {
   const { slug } = await params;
 
-  let novel = null;
-  let scenes = [];
+  let reading = null;
   try {
-    novel = await getNovelBySlug(slug);
-    if (!novel) notFound();
-    scenes = await getScenesForNovel(novel.id);
+    reading = await getReadingForNovel(slug);
   } catch {
     notFound();
   }
-  if (!novel) notFound();
+  if (!reading) notFound();
 
   return (
     <Reader
-      scenes={scenes}
-      novelTitle={novel.title}
-      novelSlug={novel.slug}
+      scenes={reading.scenes}
+      novelTitle={reading.novel.title}
+      novelSlug={reading.novel.slug}
     />
   );
 }

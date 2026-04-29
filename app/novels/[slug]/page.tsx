@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { getAllNovels, getNovelBySlug } from '@/lib/db/queries';
+import { listNovels, getNovelBySlug } from '@/lib/services/novel-service';
 import BrandWordmark from '@/app/components/BrandWordmark';
 import Button from '@/app/components/Button';
 
@@ -9,7 +9,7 @@ export const revalidate = 3600;
 
 export async function generateStaticParams() {
   try {
-    const novels = await getAllNovels();
+    const novels = await listNovels();
     if (novels.length > 0) {
       return novels.map((n) => ({ slug: n.slug }));
     }

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import type { Novel } from '@/types/db';
-import { getAllNovels } from '@/lib/db/queries';
+import { listNovels } from '@/lib/services/novel-service';
 import BrandWordmark from '@/app/components/BrandWordmark';
 import NovelCard from '@/app/components/NovelCard';
 
@@ -35,7 +35,7 @@ const placeholders: Novel[] = [
 export default async function HomePage() {
   let novels: Novel[] = [];
   try {
-    novels = await getAllNovels();
+    novels = await listNovels();
   } catch {
     // DB not seeded yet — fall through to show placeholders only
   }
