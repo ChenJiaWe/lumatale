@@ -53,6 +53,12 @@ Full design canon (tokens, wireframes, decision log) lives in
   `lumatale.<slug>.scene` and rehydrated on next visit
 - Append `?restart=1` to the read URL to reset progress
 - Last-page advance triggers an ending takeover (fade + 32px slide)
+- **朗读 / 停止** toggle narrates the current scene via the
+  Web Speech API (auto-picks a `zh-*` voice when available,
+  cancels on scene change)
+- **Dark mode** toggle in the top-right corner — respects system
+  preference on first load, persisted via `localStorage`, and
+  hydrates without theme flash via an inline `<head>` script
 - All animations honour `prefers-reduced-motion`
 
 ## Run locally
@@ -124,15 +130,21 @@ A few choices worth surfacing — full rationale in `.omc/plans/`:
 
 ## What's next (if this were the real platform)
 
-Mapped to the brief's "multimodal immersive reading":
+Already shipped from the brief's "multimodal immersive reading":
+TTS narration, dark mode, persistent progress, scene transition
+animation, typography-driven cover art.
+
+Future:
 
 - Scene-tied ambient music with a global mute control
-- Per-scene illustration / character portrait
-- TTS narration via Web Speech API
-- A writable last page persisted to a `entries` table — readers leave
-  a sentence, see what other readers wrote
-- Auth + per-user progress sync
+- Per-scene illustration / character portrait (AI-generated, per
+  scene mood)
+- A writable last page persisted to an `entries` table — readers
+  leave a sentence, see what other readers wrote
+- Auth + per-user progress sync (cross-device)
 - Scene branching (the seed for true interactive fiction)
+- Multiple voice options + reading-speed control for TTS
+- i18n for the UI chrome (story content stays in original language)
 
 ## License
 
