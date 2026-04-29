@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import type { Scene } from '@/types/db';
 import EndingScreen from '@/app/components/EndingScreen';
@@ -15,7 +15,47 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showEnding, setShowEnding] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [ttsSupported, setTtsSupported] = useState(false);
   const shouldReduce = useReducedMotion();
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      setTtsSupported(true);
+    }
+  }, []);
+
+  const stopSpeaking = useCallback(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
+    setIsSpeaking(false);
+  }, []);
+
+  const speak = useCallback((text: string, lang = 'zh-CN') => {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = lang;
+    utterance.rate = 0.95;
+    utterance.pitch = 1;
+    const voices = window.speechSynthesis.getVoices();
+    const zhVoice = voices.find((v) => v.lang.startsWith('zh'));
+    if (zhVoice) utterance.voice = zhVoice;
+    utterance.onend = () => setIsSpeaking(false);
+    utteranceRef.current = utterance;
+    window.speechSynthesis.speak(utterance);
+    setIsSpeaking(true);
+  }, []);
+
+  const toggleSpeak = useCallback(() => {
+    if (isSpeaking) {
+      stopSpeaking();
+    } else {
+      speak(scenes[currentIndex].body);
+    }
+  }, [isSpeaking, stopSpeaking, speak, scenes, currentIndex]);
 
   useEffect(() => {
     const storageKey = `lumatale.${novelSlug}.scene`;
@@ -39,6 +79,24 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
     if (!mounted) return;
     localStorage.setItem(`lumatale.${novelSlug}.scene`, String(currentIndex));
   }, [currentIndex, mounted, novelSlug]);
+
+  useEffect(() => {
+    if (!mounted) return;
+    stopSpeaking();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIndex]);
+
+  useEffect(() => {
+    if (showEnding) stopSpeaking();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showEnding]);
+
+  useEffect(() => {
+    return () => {
+      stopSpeaking();
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const goPrev = useCallback(() => {
     if (showEnding) {
@@ -159,6 +217,20 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
               className="h-full bg-ink"
             />
           </div>
+
+          {/* TTS toggle */}
+          {ttsSupported && !showEnding && (
+            <div className="flex justify-center">
+              <button
+                onClick={toggleSpeak}
+                aria-pressed={isSpeaking}
+                aria-label={isSpeaking ? '停止朗读' : '朗读当前场景'}
+                className="text-sm transition-colors hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              >
+                {isSpeaking ? '停止' : '朗读'}
+              </button>
+            </div>
+          )}
 
           {/* Keyboard hint */}
           <p className="hidden md:block text-xs text-muted text-center">
