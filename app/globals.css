@@ -33,6 +33,18 @@
   }
 }
 
+:root.dark {
+  --color-paper: #14110D;
+  --color-paper-dark: #0A0806;
+  --color-ink: #E8E0D0;
+  --color-ink-soft: #C8BFAA;
+  --color-muted: #7A6F58;
+  --color-line: #3B342A;
+  --color-accent: #D4A574;
+  --color-accent-soft: #C8956A;
+  --color-flame: #F59E0B;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

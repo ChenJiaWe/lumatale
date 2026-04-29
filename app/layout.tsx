@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import { Cormorant_Garamond, Source_Serif_4, Noto_Serif_SC } from 'next/font/google';
 import './globals.css';
+import ThemeToggle from './components/ThemeToggle';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -41,7 +42,17 @@ export default function RootLayout({
       lang="zh-CN"
       className={`${cormorant.variable} ${sourceSerif.variable} ${notoSerif.variable} antialiased h-full`}
     >
-      <body className="min-h-full bg-paper text-ink">{children}</body>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem('lumatale.theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches)){document.documentElement.classList.add('dark');}}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className="min-h-full bg-paper text-ink">
+        <ThemeToggle />
+        {children}
+      </body>
     </html>
   );
 }
