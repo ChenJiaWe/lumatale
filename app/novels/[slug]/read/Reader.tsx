@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import Link from 'next/link';
 import type { Scene } from '@/types/db';
 import EndingScreen from '@/app/components/EndingScreen';
 import BrandWordmark from '@/app/components/BrandWordmark';
@@ -169,11 +170,15 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
     >
       {/* Top bar — hides during ending takeover. pr-16 leaves room for the floating ThemeToggle at top-right. */}
       {!showEnding && (
-        <header className="flex items-center justify-between pl-6 pr-16 sm:pr-20 py-5 border-b border-line bg-paper/95 backdrop-blur-sm sticky top-0 z-10">
+        <header className="flex items-center justify-start pl-6 pr-16 sm:pr-20 py-5 border-b border-line bg-paper/95 backdrop-blur-sm sticky top-0 z-10 gap-3">
           <BrandWordmark size="mini" href="/" />
-          <span className="text-muted text-xs tracking-widest truncate ml-4 hidden sm:inline">
-            Vol. I &middot; {novelTitle}
-          </span>
+          <span className="text-muted text-sm" aria-hidden="true">/</span>
+          <Link
+            href={`/novels/${novelSlug}`}
+            className="text-muted text-sm tracking-wide hover:text-ink transition-colors truncate max-w-[50vw] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+          >
+            {novelTitle}
+          </Link>
         </header>
       )}
 
