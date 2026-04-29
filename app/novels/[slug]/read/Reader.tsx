@@ -145,7 +145,7 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
   const endingInitial = shouldReduce ? { opacity: 0 } : { opacity: 0, y: 32 };
 
   return (
-    <div className="relative min-h-[calc(100vh-4rem)] flex flex-col">
+    <div className="relative min-h-screen flex flex-col">
       <AnimatePresence mode="wait">
         {showEnding ? (
           <motion.div
@@ -154,6 +154,7 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="flex-1 flex"
           >
             <EndingScreen novelTitle={novelTitle} novelSlug={novelSlug} />
           </motion.div>
@@ -179,7 +180,8 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
         )}
       </AnimatePresence>
 
-      {/* Bottom navigation bar */}
+      {/* Bottom navigation bar (hidden when ending takes over) */}
+      {!showEnding && (
       <div className="sticky bottom-0 bg-paper/95 backdrop-blur-sm border-t border-line py-4 z-10">
         <div className="max-w-prose mx-auto px-6 flex flex-col gap-3">
           {/* Prev / indicator / next row */}
@@ -238,6 +240,7 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
           </p>
         </div>
       </div>
+      )}
     </div>
   );
 }

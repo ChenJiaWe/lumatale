@@ -8,7 +8,7 @@ type EndingScreenProps = {
 export default function EndingScreen({ novelTitle, novelSlug }: EndingScreenProps) {
   return (
     <div
-      className="fixed inset-0 flex flex-col items-center justify-center bg-paper-dark px-6"
+      className="w-full min-h-screen flex flex-col items-center justify-center bg-paper-dark px-6"
       style={{
         animation: 'endingFadeIn 800ms ease-out both',
       }}
