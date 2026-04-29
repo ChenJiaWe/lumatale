@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" role="img" aria-label="午夜图书馆 封面">
+  <defs>
+    <radialGradient id="paperGrad" cx="50%" cy="40%" r="80%">
+      <stop offset="0%" stop-color="#1f1810"/>
+      <stop offset="60%" stop-color="#14100A"/>
+      <stop offset="100%" stop-color="#0A0806"/>
+    </radialGradient>
+    <linearGradient id="titleShade" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#E8C36A"/>
+      <stop offset="100%" stop-color="#B89770"/>
+    </linearGradient>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/>
+      <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+  </defs>
+
+  <!-- Paper -->
+  <rect width="600" height="800" fill="url(#paperGrad)"/>
+  <rect width="600" height="800" filter="url(#grain)"/>
+
+  <!-- Inner border -->
+  <rect x="44" y="44" width="512" height="712" fill="none" stroke="#3B342A" stroke-width="1"/>
+  <rect x="52" y="52" width="496" height="696" fill="none" stroke="#5A4F3E" stroke-width="0.5"/>
+
+  <!-- Top eyebrow -->
+  <text x="300" y="100" text-anchor="middle"
+        font-family="Cormorant Garamond, EB Garamond, Georgia, serif"
+        font-style="italic" font-size="20" letter-spacing="6"
+        fill="#7A6F58">VOLUME &#8226; I</text>
+
+  <!-- Top rule -->
+  <line x1="240" y1="124" x2="360" y2="124" stroke="#5A4F3E" stroke-width="1"/>
+
+  <!-- Vertical Chinese title - one character per line -->
+  <g font-family="'Songti SC', 'Noto Serif SC', 'STSong', 'Source Han Serif SC', serif"
+     font-weight="500"
+     fill="url(#titleShade)"
+     text-anchor="middle"
+     letter-spacing="2">
+    <text x="300" y="240" font-size="84">午</text>
+    <text x="300" y="350" font-size="84">夜</text>
+    <text x="300" y="460" font-size="84">图</text>
+    <text x="300" y="570" font-size="84">书</text>
+    <text x="300" y="680" font-size="84">馆</text>
+  </g>
+
+  <!-- Bottom rule -->
+  <line x1="240" y1="708" x2="360" y2="708" stroke="#5A4F3E" stroke-width="1"/>
+
+  <!-- Bottom wordmark -->
+  <text x="300" y="744" text-anchor="middle"
+        font-family="Cormorant Garamond, Georgia, serif"
+        font-size="22" letter-spacing="8"
+        fill="#9C8A6E">lumatale</text>
+
+  <!-- Subtle moon mark, top right -->
+  <g transform="translate(516, 88)">
+    <circle r="14" fill="none" stroke="#5A4F3E" stroke-width="0.8"/>
+    <path d="M 0,-14 A 14,14 0 0 1 0,14 A 10,14 0 0 0 0,-14 Z" fill="#3B342A"/>
+  </g>
+</svg>

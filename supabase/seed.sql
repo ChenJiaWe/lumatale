@@ -1,18 +1,20 @@
 -- lumatale seed · 1 novel + 3 scenes
 -- Run AFTER 0001_init.sql in Supabase SQL Editor. Idempotent on slug.
 
-insert into novels (slug, title, author, synopsis, scene_count)
+insert into novels (slug, title, author, synopsis, cover_url, scene_count)
 values (
   'midnight-library',
   '午夜图书馆',
   '匿名',
   '在一座只在午夜出现的图书馆里，你只能翻开一本书。你选择了那本最不起眼的旧笔记本——里面写满了你遗忘的记忆，而最后一页，是空白的。',
+  '/covers/midnight-library.svg',
   3
 )
 on conflict (slug) do update
   set title = excluded.title,
       author = excluded.author,
       synopsis = excluded.synopsis,
+      cover_url = excluded.cover_url,
       scene_count = excluded.scene_count;
 
 with n as (select id from novels where slug = 'midnight-library')
