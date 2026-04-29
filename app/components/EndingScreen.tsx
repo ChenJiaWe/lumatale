@@ -1,4 +1,5 @@
 import Button from './Button';
+import EntryComposer from './EntryComposer';
 
 type EndingScreenProps = {
   novelTitle: string;
@@ -13,7 +14,7 @@ export default function EndingScreen({ novelTitle, novelSlug, onRestart }: Endin
       role="main"
       aria-label="故事已读完"
     >
-      <div className="flex flex-col items-center gap-8 max-w-sm text-center">
+      <div className="flex flex-col items-center gap-10 max-w-sm text-center">
         {/* Ellipsis ornament */}
         <span
           className="text-muted text-4xl tracking-[0.5em]"
@@ -37,6 +38,9 @@ export default function EndingScreen({ novelTitle, novelSlug, onRestart }: Endin
         >
           &mdash; 你已读完《{novelTitle}》&mdash;
         </p>
+
+        {/* Entry composer — writable blank page */}
+        <EntryComposer novelSlug={novelSlug} />
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full">
