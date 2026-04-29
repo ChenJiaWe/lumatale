@@ -1,5 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getNovelBySlug } from '@/lib/services/novel-service';
+import { NotFoundError } from '@/lib/errors';
+import { toErrorResponse } from '@/lib/api/error-response';
 
 export const revalidate = 3600;
 
@@ -10,15 +12,12 @@ export async function GET(
   try {
     const { slug } = await params;
     const novel = await getNovelBySlug(slug);
-    if (!novel) {
-      return NextResponse.json({ error: 'novel_not_found', slug }, { status: 404 });
-    }
+    if (!novel) throw new NotFoundError('novel');
     return NextResponse.json(
       { novel },
       { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' } }
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'unknown error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return toErrorResponse(error, 'GET /api/novels/[slug]');
   }
 }

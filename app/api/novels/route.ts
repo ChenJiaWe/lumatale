@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { listNovels } from '@/lib/services/novel-service';
+import { toErrorResponse } from '@/lib/api/error-response';
 
 export const revalidate = 3600;
 
@@ -11,7 +12,6 @@ export async function GET() {
       { headers: { 'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400' } }
     );
   } catch (error) {
-    const message = error instanceof Error ? error.message : 'unknown error';
-    return NextResponse.json({ error: message }, { status: 500 });
+    return toErrorResponse(error, 'GET /api/novels');
   }
 }
