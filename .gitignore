@@ -36,6 +36,12 @@ yarn-error.log*
 # vercel
 .vercel
 
+# omc state (keep plans/handoffs/research, ignore runtime state)
+.omc/state/
+.omc/logs/
+.omc/notepad.md
+.omc/project-memory.json
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
