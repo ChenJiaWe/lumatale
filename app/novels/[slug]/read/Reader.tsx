@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import type { Scene } from '@/types/db';
 import EndingScreen from '@/app/components/EndingScreen';
+import BrandWordmark from '@/app/components/BrandWordmark';
 
 type ReaderProps = {
   scenes: Scene[];
@@ -114,6 +115,17 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
     }
   }, [currentIndex, scenes.length]);
 
+  const restartReader = useCallback(() => {
+    stopSpeaking();
+    setShowEnding(false);
+    setCurrentIndex(0);
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.setItem(`lumatale.${novelSlug}.scene`, '0');
+      } catch {}
+    }
+  }, [novelSlug, stopSpeaking]);
+
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
       if (e.key === 'ArrowLeft' || e.key === 'j' || e.key === 'J') {
@@ -146,6 +158,16 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
 
   return (
     <div className="relative min-h-screen flex flex-col">
+      {/* Top bar — hides during ending takeover */}
+      {!showEnding && (
+        <header className="flex items-center justify-between px-6 py-5 border-b border-line bg-paper/95 backdrop-blur-sm sticky top-0 z-10">
+          <BrandWordmark size="mini" href="/" />
+          <span className="text-muted text-xs tracking-widest">
+            Vol. I &middot; {novelTitle}
+          </span>
+        </header>
+      )}
+
       <AnimatePresence mode="wait">
         {showEnding ? (
           <motion.div
@@ -156,7 +178,11 @@ export default function Reader({ scenes, novelTitle, novelSlug }: ReaderProps) {
             transition={{ duration: 0.8, ease: 'easeOut' }}
             className="flex-1 flex"
           >
-            <EndingScreen novelTitle={novelTitle} novelSlug={novelSlug} />
+            <EndingScreen
+              novelTitle={novelTitle}
+              novelSlug={novelSlug}
+              onRestart={restartReader}
+            />
           </motion.div>
         ) : (
           <motion.div

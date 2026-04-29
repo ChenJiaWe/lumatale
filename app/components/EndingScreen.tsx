@@ -3,9 +3,10 @@ import Button from './Button';
 type EndingScreenProps = {
   novelTitle: string;
   novelSlug: string;
+  onRestart?: () => void;
 };
 
-export default function EndingScreen({ novelTitle, novelSlug }: EndingScreenProps) {
+export default function EndingScreen({ novelTitle, novelSlug, onRestart }: EndingScreenProps) {
   return (
     <div
       className="w-full min-h-screen flex flex-col items-center justify-center bg-paper-dark px-6"
@@ -62,14 +63,25 @@ export default function EndingScreen({ novelTitle, novelSlug }: EndingScreenProp
 
         {/* Actions */}
         <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full">
-          <Button
-            variant="ghost"
-            href={`/novels/${novelSlug}/read`}
-            className="flex-1 justify-center"
-            aria-label={`重新阅读《${novelTitle}》`}
-          >
-            重新阅读
-          </Button>
+          {onRestart ? (
+            <Button
+              variant="ghost"
+              onClick={onRestart}
+              className="flex-1 justify-center"
+              aria-label={`重新阅读《${novelTitle}》`}
+            >
+              重新阅读
+            </Button>
+          ) : (
+            <Button
+              variant="ghost"
+              href={`/novels/${novelSlug}/read?restart=1`}
+              className="flex-1 justify-center"
+              aria-label={`重新阅读《${novelTitle}》`}
+            >
+              重新阅读
+            </Button>
+          )}
           <Button
             variant="ghost"
             href="/"
